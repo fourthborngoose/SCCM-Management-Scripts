@@ -24,6 +24,7 @@ Created By: Kris Gross
 Contact: Krisgross@sccmtst.com
 Twitter: @kmgamd
 Version 1.0.0.0
+Version 1.0.0.1
 
 .LINK
 Original script can be found here 
@@ -47,12 +48,12 @@ $TargetFolder = "$site\DeviceCollection\AD_OUs"
 Import-Module ActiveDirectory
 if ($LoadLocal -eq "$True") 
 {
-    Set-Location 'C:\Program Files (x86)\Microsoft Configuration Manager\AdminConsole\bin\'
-    Import-Module .\ConfigurationManager.psd1 -verbose:$false   
+    Write-Output "LocalLoad has been selected"
+    Import-Module -Name ConfigurationManager -verbose:$true
 }
 else 
 {
-    Import-Module \\$SiteServer\SMS_$SiteCode\AdminConsole\bin\ConfigurationManager.psd1 -verbose:$false
+    Import-Module -Name ConfigurationManager -verbose:$false
 }
 
 #Connection the the server
@@ -62,7 +63,7 @@ Set-Location $site
 IF (!(Test-Path $TargetFolder)) {New-Item $TargetFolder -ItemType Directory}
 
 # Defining refresh interval for collection. I've selected 2 hours.
-$Refr = New-CMSchedule -RecurCount 2 -RecurInterval Hourse -Start "01/01/2017 0:00"
+$Refr = New-CMSchedule -RecurCount 2 -RecurInterval Hours -Start "01/01/2024 0:00"
 
 <# Getting Canonical name and GUID from AD OUs. 
 -SearchScope is Subtree by default, you can use it or use "Base" or "OneLevel".
